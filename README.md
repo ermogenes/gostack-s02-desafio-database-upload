@@ -2,8 +2,8 @@
 
 My solution to the Rockeseat's GoStack challenge.
 
-<!-- ✔ All tests passed. -->
-_⏳ work in progress..._
+✔ All tests passed.
+<!-- _⏳ work in progress..._ -->
 
 To create database container:
 
@@ -17,8 +17,7 @@ After that, create a empty database on the container named `gostack_desafio06` a
 yarn typeorm migration:run
 ```
 
-
-To run tests:
+To run tests, create a empty database on the container named `gostack_desafio06_tests` and run:
 
 ```
 yarn test

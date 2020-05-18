@@ -1,20 +1,24 @@
 import { Router } from 'express';
 import { getCustomRepository } from 'typeorm';
+import multer from 'multer';
+
+import uploadConfig from '../config/upload';
 
 import TransactionsRepository from '../repositories/TransactionsRepository';
 import CreateTransactionService from '../services/CreateTransactionService';
-// import Transaction from '../models/Transaction';
 import DeleteTransactionService from '../services/DeleteTransactionService';
-// import ImportTransactionsService from '../services/ImportTransactionsService';
+import ImportTransactionsService from '../services/ImportTransactionsService';
 
 const transactionsRouter = Router();
+
+const upload = multer(uploadConfig);
 
 transactionsRouter.get('/', async (request, response) => {
   const transactionsRepository = getCustomRepository(TransactionsRepository);
 
   const transactions = await transactionsRepository.find({
     relations: ['category'],
-    select: ['id', 'title', 'value', 'created_at', 'updated_at'],
+    select: ['id', 'title', 'value', 'type', 'created_at', 'updated_at'],
   });
   const balance = await transactionsRepository.getBalance();
 
@@ -46,8 +50,19 @@ transactionsRouter.delete('/:id', async (request, response) => {
   response.status(204).send();
 });
 
-transactionsRouter.post('/import', async (request, response) => {
-  // TODO
-});
+transactionsRouter.post(
+  '/import',
+  upload.single('file'),
+  async (request, response) => {
+    const csvFile = request.file;
+    const importTransactionsService = new ImportTransactionsService();
+
+    const transactions = await importTransactionsService.execute(
+      csvFile.filename,
+    );
+
+    return response.json(transactions);
+  },
+);
 
 export default transactionsRouter;
