@@ -11,13 +11,13 @@ To create database container:
 docker run --name gostack-desafio06 -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
 ```
 
-After that, create a empty database on the container named `gostack_desafio06` and run the migration:
+After that, create an empty database on the container named `gostack_desafio06` and run the migration:
 
 ```
 yarn typeorm migration:run
 ```
 
-To run tests, create a empty database on the container named `gostack_desafio06_tests` and run:
+To run tests, create an empty database on the container named `gostack_desafio06_tests` and run:
 
 ```
 yarn test
